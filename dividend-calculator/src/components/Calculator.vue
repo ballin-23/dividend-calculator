@@ -1,25 +1,36 @@
 <template>
 <div class="container">
-    <Input size="large" placeholder="dividend yield" />
-    <Input size="large" placeholder="principal amount" />
-    <Input size="large" placeholder="monthly payment" />
-    <Input size="large" placeholder="years" />
+    <input type="number" v-model="principal" placeholder="Principal">
+    <input type="number" v-model="dividendYield" placeholder="Dividend Yield">
+    <input type="number" v-model="numberOfYears" placeholder="Number of Years">
+    <button @click="calculateReturn">Calculate</button>
 </div>
 </template>
 
-<script lang="ts">
+<script lang="ts">import { ref } from 'vue'
+
 export default {
 name: 'Calculator',
 setup() {
-    // assume dividends are paid monthly for now
-    const calculateDividendReturn = (amountInvested: number, years: number, dividend: number, recurringInvestment: number) => {
-        // get the dividend as a percentage
-        const div = dividend / 100
-        // A = P (1 + r/n)^(nt)
-        const total = amountInvested * (1+(div/12))**(12*years)
-        console.log(total)
+    const principal = ref<number>()
+    const dividendYield = ref<number>()
+    const numberOfYears = ref<number>()
+    const payOut = ref(0)
+
+    const calculateReturn = () => {
+        if (principal.value && dividendYield.value && numberOfYears.value) {
+            const totalMonths = numberOfYears.value * 12
+            const monthlyInterestRate = (dividendYield.value / 100)/12
+            for (let month = 1; month <= totalMonths; month++) {
+                principal.value *= (1 + monthlyInterestRate);
+                console.log(principal.value)
+            }
+        }
+        else {
+            console.log("there is a field that hasn't been filled out properly")
+        }
     }
-    calculateDividendReturn(10000,1, 10, 400)
+    return {dividendYield, numberOfYears, payOut,principal, calculateReturn}
 }
 }
 </script>
