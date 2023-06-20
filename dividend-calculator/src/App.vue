@@ -1,15 +1,16 @@
 <template>
-  <Calculator/>
+  <CalculationPage />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Calculator from '@/components/Calculator.vue'
+
+import CalculationPage from './pages/CalculationPage.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    Calculator
+    CalculationPage
   }
 });
 </script>

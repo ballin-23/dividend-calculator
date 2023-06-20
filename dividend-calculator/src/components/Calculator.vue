@@ -1,13 +1,41 @@
 <template>
 <div class="container">
-    <input type="number" v-model="principal" placeholder="Principal">
-    <input type="number" v-model="dividendYield" placeholder="Dividend Yield">
-    <input type="number" v-model="numberOfYears" placeholder="Number of Years">
-    <select v-model="compounded">
-        <option value="Monthly">Monthly</option>
-        <option value="Quarterly">Quarterly</option>
-        <option value="Yearly">Yearly</option>
-    </select>
+    <div class="container-header">
+        Dividend Calculator
+    </div>
+    <div class="calculator-row">
+        principal
+        <input type="number" v-model="principal" placeholder="Principal">
+    </div>
+    <div class="calculator-row">
+        Dividend Yield
+        <input type="number" v-model="dividendYield" placeholder="Dividend Yield">
+    </div>
+    <div class="calculator-row">
+        Number of Years
+        <input type="number" v-model="numberOfYears" placeholder="Number of Years">
+    </div>
+    <div class="calculator-row">
+        Dividend Payout Frequency
+        <select v-model="compounded">
+            <option value="Monthly">Monthly</option>
+            <option value="Quarterly">Quarterly</option>
+            <option value="Yearly">Yearly</option>
+        </select>
+    </div>
+    <div class="contribution-container">
+        <div class="contribution-container-header">
+            Contributions
+        </div>
+        <div class="calculator-row">
+            Contribution Frequency
+            <select>
+                <option value="Monthly">Monthly</option>
+                <option value="Quarterly">Quarterly</option>
+                <option value="Yearly">Yearly</option>
+            </select>
+        </div>
+    </div>
     <button @click="calculateReturn">Calculate</button>
     <div v-if="total">
         <p>the total amount is {{ total }}</p>
@@ -42,6 +70,7 @@ const calculateReturn = () => {
         const totalMonths = numberOfYears.value * compounded_frequency
         const monthlyInterestRate = (dividendYield.value / 100)/compounded_frequency
         for (let month = 1; month <= totalMonths; month++) {
+            console.log(compounded_value)
             compounded_value *= (1 + monthlyInterestRate);
         }
         total.value = parseFloat(compounded_value.toFixed(2))
@@ -61,5 +90,24 @@ const calculateReturn = () => {
     width: 50%;
     background-color: rgb(255, 75, 75);
     padding: 20px;
+}
+
+.contribution-container {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
+}
+
+.contribution-container-header {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.calculator-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: 2px solid black;
 }
 </style>
