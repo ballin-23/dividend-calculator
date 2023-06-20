@@ -29,11 +29,15 @@
         </div>
         <div class="calculator-row">
             Contribution Frequency
-            <select>
+            <select v-model="contributionFrequency">
                 <option value="Monthly">Monthly</option>
                 <option value="Quarterly">Quarterly</option>
                 <option value="Yearly">Yearly</option>
             </select>
+        </div>
+        <div class="calculator-row">
+            Contribution Amount
+            <input type="number" v-model="extraContribution" placeholder="Amount">
         </div>
     </div>
     <button @click="calculateReturn">Calculate</button>
@@ -49,7 +53,9 @@ const principal = ref<number>()
 const dividendYield = ref<number>()
 const numberOfYears = ref<number>()
 const total = ref<number>()
-let compounded = ref<string>("Monthly")
+const compounded = ref<string>("Monthly")
+const contributionFrequency = ref<string>("")
+const extraContribution = ref<number>()
 
 const emits = defineEmits(['calculatedReturn'])
 
@@ -62,16 +68,30 @@ const handleCompounded = (compounded: string) => {
     return 1
 }
 
+const handleContribution = (contribution: string) => {
+    if (contribution === "Monthly") {
+        return 12
+    } else if (contribution === "Quarterly") {
+        return 4
+    }
+    return 1
+}
+
 const calculateReturn = () => {
     if (principal.value && dividendYield.value && numberOfYears.value && compounded.value) {
+        let extra = 0
+        if (contributionFrequency.value !== "" && extraContribution.value !== 0 && extraContribution.value != undefined) {
+            extra = extraContribution.value
+        }
         // need the local copy to avoid updating the principal amount shown
         let compounded_frequency = handleCompounded(compounded.value)
         let compounded_value = principal.value
         const totalMonths = numberOfYears.value * compounded_frequency
         const monthlyInterestRate = (dividendYield.value / 100)/compounded_frequency
         for (let month = 1; month <= totalMonths; month++) {
-            console.log(compounded_value)
-            compounded_value *= (1 + monthlyInterestRate);
+            let compoundedInterest = compounded_value * monthlyInterestRate
+            compounded_value += compoundedInterest + extra
+            console.log(compounded_value, compoundedInterest, extra)
         }
         total.value = parseFloat(compounded_value.toFixed(2))
         emits('calculatedReturn', total.value)
