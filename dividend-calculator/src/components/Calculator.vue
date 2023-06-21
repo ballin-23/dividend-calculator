@@ -49,33 +49,16 @@
 
 <script lang="ts" setup>
 import { ref, defineEmits } from 'vue'
-const principal = ref<number>()
-const dividendYield = ref<number>()
-const numberOfYears = ref<number>()
+import { CalculationHelper } from '@/helpers/CalculationHelper'
+const principal = ref<number>(1000)
+const dividendYield = ref<number>(10)
+const numberOfYears = ref<number>(1)
 const total = ref<number>()
 const compounded = ref<string>("Monthly")
-const contributionFrequency = ref<string>("")
-const extraContribution = ref<number>()
+const contributionFrequency = ref<string>("Monthly")
+const extraContribution = ref<number>(100)
 
 const emits = defineEmits(['calculatedReturn'])
-
-const handleCompounded = (compounded: string) => {    
-    if (compounded === "Monthly") {
-        return 12
-    } else if (compounded === "Quarterly") {
-        return 4
-    }
-    return 1
-}
-
-const handleContribution = (contribution: string) => {
-    if (contribution === "Monthly") {
-        return 12
-    } else if (contribution === "Quarterly") {
-        return 4
-    }
-    return 1
-}
 
 const calculateReturn = () => {
     if (principal.value && dividendYield.value && numberOfYears.value && compounded.value) {
@@ -84,16 +67,10 @@ const calculateReturn = () => {
             extra = extraContribution.value
         }
         // need the local copy to avoid updating the principal amount shown
-        let compounded_frequency = handleCompounded(compounded.value)
-        let compounded_value = principal.value
-        const totalMonths = numberOfYears.value * compounded_frequency
-        const monthlyInterestRate = (dividendYield.value / 100)/compounded_frequency
-        for (let month = 1; month <= totalMonths; month++) {
-            let compoundedInterest = compounded_value * monthlyInterestRate
-            compounded_value += compoundedInterest + extra
-            console.log(compounded_value, compoundedInterest, extra)
-        }
-        total.value = parseFloat(compounded_value.toFixed(2))
+        let paymentFrequency = CalculationHelper.getNumberOfContributions(contributionFrequency.value)
+        let compounded_frequency = CalculationHelper.getCompoundingIntervalsInYear(compounded.value)
+        total.value = CalculationHelper.CalculateReturn(principal.value, numberOfYears.value, dividendYield.value, compounded_frequency, paymentFrequency, extra)
+        total.value = parseFloat(total.value.toFixed(2))
         emits('calculatedReturn', total.value)
     }
     else {

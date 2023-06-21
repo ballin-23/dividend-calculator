@@ -33,13 +33,13 @@ const handleCalculatedReturn = (value: number) => {
     flex-direction: column;
 }
 .calculation-page-top-half-container {
-    height: 70%;
+    height: 60%;
     display: flex;
     flex-direction: row;
     justify-content: space-between
 }
 
 .calculation-page-bottom-half-container {
-    height: 30%;
+    height: 40%;
 }
 </style>
