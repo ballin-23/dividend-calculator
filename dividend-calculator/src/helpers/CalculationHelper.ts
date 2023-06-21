@@ -15,13 +15,20 @@ export class CalculationHelper {
         const interestRate = (dividend / 100)/dividendFrequency
         for (let month = 1; month <= totalMonths; month++) {
                 let compoundedInterest = total * interestRate
-                total += compoundedInterest + contributionAmount
-                console.log(total, compoundedInterest, contributionAmount)
+                total += compoundedInterest
+                if (month % contributionFrequency == 0) {
+                    total += contributionAmount
+                }
         }
         return total
     }
 
-    public static getCompoundingIntervalsInYear(frequency: string) {
+    /**
+    * gets the number of compounding intervals per year
+    * @param {string} frequency: the string representation of the compounding frequency
+    * @returns {number} the number of compounding intervals in a year
+    */
+    public static getCompoundingIntervalsInYear(frequency: string): number {
         if (frequency === "Monthly") {
             return 12
         } else if (frequency === "Quarterly") {
@@ -30,7 +37,12 @@ export class CalculationHelper {
         return 1
     }
 
-    public static getNumberOfContributions(frequency: string) {
+    /**
+    * gets the number of compounding intervals per year
+    * @param {string} frequency: the string representation of the contribution frequency
+    * @returns {number} the number of time a contribution is made per year
+    */
+    public static getNumberOfContributions(frequency: string): number {
         if (frequency === "Monthly") {
             return 1
         } else if (frequency === "Quarterly") {
