@@ -1,7 +1,9 @@
 <template>
     <div class="return-table-container">
-        <div class="return-table-top-value" v-if="calculatedReturnValue">
+        <div class="return-table-top-value" v-show="calculatedReturnValue">
             Your Total Calculated Return: {{ calculatedReturn }}
+        </div>
+        <div class="return-table-values" v-show="calculatedReturnValue"> 
         </div>
     </div>
 </template>
@@ -35,5 +37,15 @@ watch(() => props.calculatedReturn, (newValue) => {
     height: 50px;
     margin: 20px;
     font-weight: bold;
+}
+
+.return-table-values {
+    border: 2px solid black;
+    height: 500px;
+    max-height: 300px;
+    margin: 20px;
+    font-weight: bold;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 </style>
