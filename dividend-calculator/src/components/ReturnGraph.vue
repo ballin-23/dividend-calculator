@@ -2,7 +2,7 @@
     <v-chart class="chart" :option="option" autoresize />
   </template>
   
-  <script setup>
+  <script setup lang="ts">
   import { use } from 'echarts/core';
   import { CanvasRenderer } from 'echarts/renderers';
   import { PieChart } from 'echarts/charts';
@@ -65,7 +65,7 @@
   
   <style scoped>
   .chart {
-    height: 300px;
+    height: 100%;
   }
   </style>
   

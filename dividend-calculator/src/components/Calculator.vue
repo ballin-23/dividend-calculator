@@ -69,8 +69,9 @@ const calculateReturn = () => {
         // need the local copy to avoid updating the principal amount shown
         let paymentFrequency = CalculationHelper.getNumberOfContributions(contributionFrequency.value)
         let compounded_frequency = CalculationHelper.getCompoundingIntervalsInYear(compounded.value)
-        total.value = CalculationHelper.CalculateReturn(principal.value, numberOfYears.value, dividendYield.value, compounded_frequency, paymentFrequency, extra)
-        total.value = parseFloat(total.value.toFixed(2))
+        const returnHistoryList = CalculationHelper.CalculateReturn(principal.value, numberOfYears.value, dividendYield.value, compounded_frequency, paymentFrequency, extra)
+        const returns = returnHistoryList.map(str => parseFloat(str));
+        total.value = returns[returns.length-1]
         emits('calculatedReturn', total.value)
     }
     else {
